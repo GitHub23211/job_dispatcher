@@ -3,5 +3,7 @@ public class Main {
         Client client = new Client("localhost", 50000);
         client.auth();
         client.getServerInfo();
+        client.scheduleJobs();
+        client.close();
     }
 }

@@ -30,7 +30,7 @@ public class Client {
 
     public void auth() {
         try {
-            String[] msgs = {"HELO\n", "AUTH user\n", "REDY\n"};
+            String[] msgs = {"HELO", "AUTH user", "REDY"};
             for(int i = 0; i < msgs.length; i++) {
                 this.sendMsgs(msgs[i]);
                 this.printMsgs();
@@ -40,34 +40,53 @@ public class Client {
 
     public void getServerInfo() {
         try {
-            this.sendMsgs("GETS All\n");
+            this.sendMsgs("GETS All");
             this.printMsgs();
             if(this.buffer.contains("DATA")) {
-                this.sendMsgs("OK\n");
+                this.sendMsgs("OK");
                 this.buffer = this.input.readLine();
                 while(this.input.ready()) {
                     this.buffer = this.input.readLine();
                 }
                 this.getFirstLargestServer(buffer);
                 System.out.println(this.largestServer);
-                this.sendMsgs("OK\n");
+                this.sendMsgs("OK");
             }
             this.printMsgs();
         } catch (Exception e) {System.out.println("Error @ GETS All request: " + e);}
     }
 
+    public void scheduleJobs() {
+        try {
+            while(!this.buffer.contains("NONE")) {
+                if(this.getJobId(buffer).contains("n/a")) {
+                    this.sendMsgs("REDY");
+                    this.printMsgs();
+                }
+                else {
+                    String jobToSchedule = "SCHD " + this.getJobId(buffer) + " " + this.largestServer + " 0";
+                    this.sendMsgs(jobToSchedule);
+                    this.printMsgs();
+                    this.sendMsgs("REDY");
+                    this.printMsgs();
+                }
+            }
+
+        } catch (Exception e) {System.out.println("Error @ job scheduling: " + e);}
+    }
+
     private void sendMsgs(String msg) {
         try {
-            this.output.write(msg.getBytes());
+            this.output.write((msg + "\n").getBytes());
             this.output.flush();
-            System.out.println("Client says: " + msg);	
+            //System.out.println("Client says: " + msg);	
         } catch (Exception e) {System.out.println("Error @ sending message to server: " + e);}
     }
 
     private void printMsgs() {
         try {
             buffer = this.input.readLine();
-            System.out.println("Server says: " + buffer);
+            //System.out.println("Server says: " + buffer);
         } catch (Exception e) {System.out.println("Error @ printing server messages: " + e);}
     }
 
@@ -80,5 +99,25 @@ public class Client {
         else {
             throw new Exception("Could not find largest server ID");
         }
+    }
+
+    private String getJobId(String msg) {
+        Pattern reg = Pattern.compile("([a-zA-Z ])+[0-9]+([ ]+[0-9]+)");
+        Matcher m = reg.matcher(msg);
+        if(m.find()) {
+            if(m.group(0).contains("JCPL")){
+                return "n/a";
+            }
+            return m.group(2);
+        }
+        return "0";
+    }
+
+    public void close() {
+        try {
+            this.sendMsgs("QUIT");
+            this.client.close();
+        } catch (Exception e) {System.out.println("COULD NOT CLOSE CLIENT GRACEFULLY");}
+
     }
 }
