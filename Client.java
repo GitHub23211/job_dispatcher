@@ -33,29 +33,28 @@ public class Client {
         try {
             String[] msgs = {"HELO", "AUTH user", "REDY"};
             for(int i = 0; i < msgs.length; i++) {
-                sendMsgs(msgs[i]);
-                printMsgs();
+                sendMsg(msgs[i]);
+                printMsg();
             }
         } catch (Exception e) {System.out.println("Error @ authentication: " + e);}
     }
 
     public void getServerInfo() {
         try {
-            sendMsgs("GETS All");
-            printMsgs();
+            sendMsg("GETS All");
+            printMsg();
             if(buffer.contains("DATA")) {
-                sendMsgs("OK");
+                sendMsg("OK");
                 buffer = input.readLine();
                 while(input.ready()) {
                     buffer = input.readLine();
                 }
                 getLargestServer(buffer);
-                System.out.println(largestServerName);
-                sendMsgs("OK");
+                sendMsg("OK");
             }
-            printMsgs();
-            sendMsgs("REDY");
-            printMsgs();
+            printMsg();
+            sendMsg("REDY");
+            printMsg();
         } catch (Exception e) {System.out.println("Error @ GETS All request: " + e);}
     }
 
@@ -64,17 +63,15 @@ public class Client {
             int i = 0;
             while(!buffer.contains("NONE")) {
                 if(buffer.contains("JCPL")) {
-                    sendMsgs("REDY");
-                    printMsgs();
+                    sendMsg("REDY");
+                    printMsg();
                 }
                 else {
                     String jobToSchedule = "SCHD" + getJobId(buffer) + " " + largestServerName + " " + i;
-                    sendMsgs(jobToSchedule);
-                    printMsgs();
-                    Thread.sleep(2000);
-                    sendMsgs("REDY");
-                    printMsgs();
-                    Thread.sleep(2000);
+                    sendMsg(jobToSchedule);
+                    printMsg();
+                    sendMsg("REDY");
+                    printMsg();
                     i++;
                 }
                 if(i > largestServerMax) {
@@ -85,18 +82,16 @@ public class Client {
         } catch (Exception e) {System.out.println("Error @ job scheduling: " + e);}
     }
 
-    private void sendMsgs(String msg) {
+    private void sendMsg(String msg) {
         try {
             output.write((msg + "\n").getBytes());
             output.flush();
-            System.out.println("Client says: " + msg);	
         } catch (Exception e) {System.out.println("Error @ sending message to server: " + e);}
     }
 
-    private void printMsgs() {
+    private void printMsg() {
         try {
             buffer = input.readLine();
-            System.out.println("Server says: " + buffer);
         } catch (Exception e) {System.out.println("Error @ printing server messages: " + e);}
     }       
 
@@ -126,7 +121,7 @@ public class Client {
 
     public void close() {
         try {
-            sendMsgs("QUIT");
+            sendMsg("QUIT");
             client.close();
         } catch (Exception e) {System.out.println("COULD NOT CLOSE CLIENT GRACEFULLY");}
 
