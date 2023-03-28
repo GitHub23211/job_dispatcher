@@ -11,6 +11,7 @@ public class Client {
     private Buffer buffer;
     private Message msg;
     private Parser parser;
+    private Scheduler schedule;
     
     public Client(String ip, int port) {
         this.ip = ip;
@@ -37,22 +38,6 @@ public class Client {
             }
         } catch (Exception e) {System.out.println("Error @ authentication: " + e);}
     }
-
-    public void getLargestServer() {
-        try {
-            msg.send("GETS All");
-            if(buffer.get().contains("DATA")) {
-                msg.send("OK");
-                while(input.ready()) {
-                    buffer.update(input.readLine());
-                }
-                parser.findLargestServer(buffer.get());
-                msg.send("OK");
-            }
-            msg.send("REDY");
-        } catch (Exception e) {System.out.println("Error @ GETS All request: " + e);}
-    }
-
 
     public void close() {
         try {
