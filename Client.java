@@ -8,9 +8,9 @@ public class Client {
     private Socket client;
     private BufferedReader input;
     private DataOutputStream output;
-    private Buffer buffer = new Buffer();
+    private Buffer buffer;
     private Message msg;
-    private Parser parser = new Parser();
+    private Parser parser;
     
     public Client(String ip, int port) {
         this.ip = ip;
@@ -24,6 +24,8 @@ public class Client {
             input = new BufferedReader(new InputStreamReader(client.getInputStream()));
             output = new DataOutputStream(client.getOutputStream());
             msg = new Message(output, buffer);
+            buffer = new Buffer();
+            parser = new Parser();
         } catch (Exception e) {System.out.println("Error @ initalisaiton: " + e);}       
     }
 
