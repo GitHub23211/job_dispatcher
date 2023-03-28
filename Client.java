@@ -1,5 +1,8 @@
 import java.net.*;
 import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class Client {
     private String ip;
@@ -8,6 +11,7 @@ public class Client {
     private BufferedReader input;
     private DataOutputStream output;
     private String buffer;
+    private String largestServer;
     
     public Client(String ip, int port) {
         this.ip = ip;
@@ -42,8 +46,10 @@ public class Client {
                 this.sendMsgs("OK\n");
                 this.buffer = this.input.readLine();
                 while(this.input.ready()) {
-                    this.printMsgs();
+                    this.buffer = this.input.readLine();
                 }
+                this.getFirstLargestServer(buffer);
+                System.out.println(this.largestServer);
                 this.sendMsgs("OK\n");
             }
             this.printMsgs();
@@ -63,5 +69,16 @@ public class Client {
             buffer = this.input.readLine();
             System.out.println("Server says: " + buffer);
         } catch (Exception e) {System.out.println("Error @ printing server messages: " + e);}
+    }
+
+    private void getFirstLargestServer(String msg) throws Exception {
+        Pattern reg = Pattern.compile("([^ ])+");
+        Matcher m = reg.matcher(msg);
+        if(m.find()) {
+            this.largestServer = m.group(0);
+        }
+        else {
+            throw new Exception("Could not find largest server ID");
+        }
     }
 }
