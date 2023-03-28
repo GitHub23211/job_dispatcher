@@ -1,7 +1,5 @@
 import java.net.*;
 import java.io.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class Client {
@@ -10,14 +8,13 @@ public class Client {
     private Socket client;
     private BufferedReader input;
     private DataOutputStream output;
-    private String buffer;
-    private String largestServerName;
-    private int largestServerMax;
+    private Buffer buffer = new Buffer();
+    private Message msg;
+    private Parser parser = new Parser();
     
     public Client(String ip, int port) {
         this.ip = ip;
         this.port = port;
-        this.buffer = "";
         initalise();
     }
 
@@ -26,6 +23,7 @@ public class Client {
             client = new Socket(ip, port);
             input = new BufferedReader(new InputStreamReader(client.getInputStream()));
             output = new DataOutputStream(client.getOutputStream());
+            msg = new Message(output, buffer);
         } catch (Exception e) {System.out.println("Error @ initalisaiton: " + e);}       
     }
 
@@ -33,96 +31,33 @@ public class Client {
         try {
             String[] msgs = {"HELO", "AUTH user", "REDY"};
             for(int i = 0; i < msgs.length; i++) {
-                sendMsg(msgs[i]);
-                printMsg();
+                msg.send(msgs[i]);
             }
         } catch (Exception e) {System.out.println("Error @ authentication: " + e);}
     }
 
-    public void getServerInfo() {
+    public void getLargestServer() {
         try {
-            sendMsg("GETS All");
-            printMsg();
-            if(buffer.contains("DATA")) {
-                sendMsg("OK");
-                buffer = input.readLine();
+            msg.send("GETS All");
+            if(buffer.get().contains("DATA")) {
+                msg.send("OK");
                 while(input.ready()) {
-                    buffer = input.readLine();
+                    buffer.update(input.readLine());
                 }
-                getLargestServer(buffer);
-                sendMsg("OK");
+                parser.findLargestServer(buffer.get());
+                msg.send("OK");
             }
-            printMsg();
-            sendMsg("REDY");
-            printMsg();
+            msg.send("REDY");
         } catch (Exception e) {System.out.println("Error @ GETS All request: " + e);}
     }
 
-    public void scheduleJobs() {
-        try {
-            int i = 0;
-            while(!buffer.contains("NONE")) {
-                if(buffer.contains("JCPL")) {
-                    sendMsg("REDY");
-                    printMsg();
-                }
-                else {
-                    String jobToSchedule = "SCHD" + getJobId(buffer) + " " + largestServerName + " " + i;
-                    sendMsg(jobToSchedule);
-                    printMsg();
-                    sendMsg("REDY");
-                    printMsg();
-                    i++;
-                }
-                if(i > largestServerMax) {
-                    i = 0;
-                }
-            }
-
-        } catch (Exception e) {System.out.println("Error @ job scheduling: " + e);}
-    }
-
-    private void sendMsg(String msg) {
-        try {
-            output.write((msg + "\n").getBytes());
-            output.flush();
-        } catch (Exception e) {System.out.println("Error @ sending message to server: " + e);}
-    }
-
-    private void printMsg() {
-        try {
-            buffer = input.readLine();
-        } catch (Exception e) {System.out.println("Error @ printing server messages: " + e);}
-    }       
-
-    private void getLargestServer(String msg) throws Exception {
-        Pattern reg = Pattern.compile("([^ ]+)([ ])([0-9]+)");
-        Matcher m = reg.matcher(msg);
-        if(m.find()) {
-            largestServerName = m.group(1);
-            largestServerMax = Integer.parseInt(m.group(3));
-        }
-        else {
-            throw new Exception("Could not find largest server ID");
-        }
-    }
-
-    private String getJobId(String msg) throws Exception {
-        Pattern reg = Pattern.compile("([a-zA-Z ])+[0-9]+([ ]+[0-9]+)");
-        Matcher m = reg.matcher(msg);
-        if(m.find()) {
-            if(m.group(0).contains("JOBN")){
-                return m.group(2);
-            }
-            return "0";
-        }
-        throw new Exception("Could not get Job Id");
-    }
 
     public void close() {
         try {
-            sendMsg("QUIT");
-            client.close();
+            msg.send("QUIT");
+            if(this.buffer.equals("QUIT")) {
+                client.close();
+            }
         } catch (Exception e) {System.out.println("COULD NOT CLOSE CLIENT GRACEFULLY");}
 
     }
