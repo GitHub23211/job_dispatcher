@@ -3,20 +3,18 @@ import java.util.Optional;
 public class AlgorithmFactory {
     private Buffer buffer;
     private Message msg;
-    private Parser parser;
 
-    AlgorithmFactory(Buffer buffer, Message msg, Parser parser) {
+    AlgorithmFactory(Buffer buffer, Message msg) {
         this.buffer = buffer;
         this.msg = msg;
-        this.parser = parser;
     }
     
     public Optional<Scheduler> getAlgorithm(String algo) {
         switch(algo) {
             case "ATL":
-                return Optional.of(new ATL(buffer, msg, parser));
+                return Optional.of(new ATL(buffer, msg));
             case "LRR":
-                return Optional.of(new LLR(buffer, msg, parser));
+                return Optional.of(new LRR(buffer, msg));
             default:
                 return Optional.empty();
         }
