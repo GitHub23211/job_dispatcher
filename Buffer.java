@@ -19,4 +19,8 @@ public class Buffer {
         }
         catch (Exception e) {System.out.println("Could not update buffer");}
     }
+
+    public boolean contains(String msg) {
+        return buffer.contains(msg);
+    }
 }
