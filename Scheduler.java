@@ -2,12 +2,14 @@ public abstract class Scheduler {
     Buffer buffer;
     Message msg;
     String largestServerName;
+    String maxLargestServer;
     Parser parser;
 
-    Scheduler(Buffer buffer, Message msg, String largestServerName, Parser parser) {
+    Scheduler(Buffer buffer, Message msg, Parser parser) {
         this.buffer = buffer;
         this.msg = msg;
-        this.largestServerName = largestServerName;
+        this.largestServerName = "";
+        this.maxLargestServer = "0";
         this.parser = parser;
     }
 
@@ -21,7 +23,8 @@ public abstract class Scheduler {
                 while(buffer.isReady()) {
                     buffer.update();
                 }
-                parser.findLargestServer(buffer.get());
+                largestServerName = parser.findLargestServer(buffer.get());
+                maxLargestServer = parser.getMaxNumServers(buffer.get());
                 msg.send("OK");
             }
             msg.send("REDY");
