@@ -7,8 +7,8 @@ public class ATL extends Scheduler {
     @Override
     public void execute() {
         try {
-            while(!buffer.get().contains("NONE")) {
-                if(buffer.get().contains("JCPL")) {
+            while(!buffer.contains("NONE")) {
+                if(buffer.contains("JCPL")) {
                     msg.send("REDY");
                 }
                 else {

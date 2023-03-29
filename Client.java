@@ -25,7 +25,7 @@ public class Client {
             input = new BufferedReader(new InputStreamReader(client.getInputStream()));
             output = new DataOutputStream(client.getOutputStream());
             msg = new Message(output, buffer);
-            buffer = new Buffer();
+            buffer = new Buffer(input);
             parser = new Parser();
         } catch (Exception e) {System.out.println("Error @ initalisaiton: " + e);}       
     }
@@ -42,7 +42,7 @@ public class Client {
     public void close() {
         try {
             msg.send("QUIT");
-            if(this.buffer.equals("QUIT")) {
+            if(buffer.equals("QUIT")) {
                 client.close();
             }
         } catch (Exception e) {System.out.println("COULD NOT CLOSE CLIENT GRACEFULLY");}

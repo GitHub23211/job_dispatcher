@@ -23,4 +23,8 @@ public class Buffer {
     public boolean contains(String msg) {
         return buffer.contains(msg);
     }
+
+    public boolean equals(String msg) {
+        return buffer.equals(msg);
+    }
 }
