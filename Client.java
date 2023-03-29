@@ -11,6 +11,7 @@ public class Client {
     private Buffer buffer;
     private Message msg;
     private Parser parser;
+    private AlgorithmFactory fact;
     private Scheduler schedule;
     
     public Client(String ip, int port) {
@@ -24,10 +25,17 @@ public class Client {
             client = new Socket(ip, port);
             input = new BufferedReader(new InputStreamReader(client.getInputStream()));
             output = new DataOutputStream(client.getOutputStream());
-            msg = new Message(output, buffer);
             buffer = new Buffer(input);
             parser = new Parser();
+            msg = new Message(output, buffer);
+            fact = new AlgorithmFactory(buffer, msg, parser);
         } catch (Exception e) {System.out.println("Error @ initalisaiton: " + e);}       
+    }
+
+    public void execute() {
+        auth();
+        run();
+        close();
     }
 
     public void auth() {
@@ -37,6 +45,12 @@ public class Client {
                 msg.send(msgs[i]);
             }
         } catch (Exception e) {System.out.println("Error @ authentication: " + e);}
+    }
+
+    public void run() {
+        schedule = fact.getAlgorithm("LLR").get();
+        schedule.getLargestServer();
+        schedule.execute();
     }
 
     public void close() {
