@@ -1,18 +1,14 @@
-import java.io.*;
-
 public abstract class Scheduler {
     Buffer buffer;
     Message msg;
     String largestServerName;
     Parser parser;
-    BufferedReader input;
 
-    Scheduler(Buffer buffer, Message msg, String largestServerName, Parser parser, BufferedReader input) {
+    Scheduler(Buffer buffer, Message msg, String largestServerName, Parser parser) {
         this.buffer = buffer;
         this.msg = msg;
         this.largestServerName = largestServerName;
         this.parser = parser;
-        this.input = input;
     }
 
     public abstract void execute();

@@ -1,7 +1,11 @@
+import java.io.BufferedReader;
+
 public class Buffer {
     private String buffer;
+    BufferedReader input;
 
-    Buffer() {
+    Buffer(BufferedReader input) {
+        this.input = input;
         this.buffer = "";
     }
 
@@ -9,7 +13,10 @@ public class Buffer {
         return buffer;
     }
 
-    public void update(String buffer) {
-        this.buffer = buffer;
+    public void update(){
+        try {
+            buffer = input.readLine();
+        }
+        catch (Exception e) {System.out.println("Could not update buffer");}
     }
 }
