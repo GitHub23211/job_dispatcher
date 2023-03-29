@@ -26,6 +26,4 @@ public class LLR extends Scheduler{
 
         } catch (Exception e) {System.out.println("Error @ job scheduling: " + e);}
     }
-
-    
 }
