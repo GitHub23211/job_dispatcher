@@ -1,7 +1,7 @@
 public class ATL extends Scheduler { 
 
-    ATL(Buffer buffer, Message msg, String largestServerName, Parser parser) {
-        super(buffer, msg, largestServerName, parser);
+    ATL(Buffer buffer, Message msg, Parser parser) {
+        super(buffer, msg, parser);
     }
 
     @Override
