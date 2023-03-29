@@ -1,6 +1,6 @@
+import java.util.Optional;
 import java.net.*;
 import java.io.*;
-
 
 public class Client {
     private String ip;
@@ -10,13 +10,14 @@ public class Client {
     private DataOutputStream output;
     private Buffer buffer;
     private Message msg;
-    private Parser parser;
     private AlgorithmFactory fact;
-    private Scheduler schedule;
+    private Optional<Scheduler> schedule;
+    private String alg;
     
-    public Client(String ip, int port) {
+    public Client(String ip, int port, String alg) {
         this.ip = ip;
         this.port = port;
+        this.alg = alg;
         initalise();
     }
 
@@ -26,16 +27,17 @@ public class Client {
             input = new BufferedReader(new InputStreamReader(client.getInputStream()));
             output = new DataOutputStream(client.getOutputStream());
             buffer = new Buffer(input);
-            parser = new Parser();
             msg = new Message(output, buffer);
-            fact = new AlgorithmFactory(buffer, msg, parser);
+            fact = new AlgorithmFactory(buffer, msg);
         } catch (Exception e) {System.out.println("Error @ initalisaiton: " + e);}       
     }
 
     public void execute() {
         auth();
         run();
-        close();
+        if(!client.isClosed()) {
+            close();
+        }
     }
 
     public void auth() {
@@ -48,9 +50,15 @@ public class Client {
     }
 
     public void run() {
-        schedule = fact.getAlgorithm("LLR").get();
-        schedule.getLargestServer();
-        schedule.execute();
+        schedule = fact.getAlgorithm(alg);
+        if(schedule.isPresent()) {
+            schedule.get().getLargestServer();
+            schedule.get().execute();
+        }
+        else {
+            schedule = Optional.of(new LRR(buffer, msg));
+            schedule.get().execute();
+        }
     }
 
     public void close() {
