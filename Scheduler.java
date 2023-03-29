@@ -16,10 +16,10 @@ public abstract class Scheduler {
     public void getLargestServer() {
         try {
             msg.send("GETS All");
-            if(buffer.get().contains("DATA")) {
+            if(buffer.contains("DATA")) {
                 msg.send("OK");
-                while(input.ready()) {
-                    buffer.update(input.readLine());
+                while(buffer.isReady()) {
+                    buffer.update();
                 }
                 parser.findLargestServer(buffer.get());
                 msg.send("OK");

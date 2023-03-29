@@ -17,7 +17,14 @@ public class Buffer {
         try {
             buffer = input.readLine();
         }
-        catch (Exception e) {System.out.println("Could not update buffer");}
+        catch (Exception e) {System.out.println("Could not update buffer " + e);}
+    }
+
+    public boolean isReady() {
+        try {
+            boolean ready = input.ready();
+            return ready;
+        } catch (Exception e) {System.out.println("Could not get state of buffer " + e); return false;}
     }
 
     public boolean contains(String msg) {

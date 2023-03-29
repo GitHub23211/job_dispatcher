@@ -13,7 +13,7 @@ public class Message {
         try {
             output.write((msg + "\n").getBytes());
             output.flush();
-            buffer.update(msg);
+            buffer.update();
         } catch (Exception e) {System.out.println("Error @ messages: " + e);}
     }    
 }
