@@ -13,8 +13,7 @@ public class LRR extends Scheduler{
                     msg.send("REDY");
                 }
                 else {
-                    String jobToSchedule = "SCHD" + getJobId(buffer.get()) + " " + largestServerName + " " + i;
-                    msg.send(jobToSchedule);
+                    msg.send(getJob() + i);
                     msg.send("REDY");
                     i++;
                 }

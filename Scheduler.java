@@ -34,5 +34,9 @@ public abstract class Scheduler {
         }
         return "";
     }
+
+    public String getJob() {
+        return "SCHD" + getJobId(buffer.get()) + " " + largestServerName + " ";
+    }
     
 }

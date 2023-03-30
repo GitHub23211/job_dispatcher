@@ -12,8 +12,7 @@ public class ATL extends Scheduler {
                     msg.send("REDY");
                 }
                 else {
-                    String jobToSchedule = "SCHD" + getJobId(buffer.get()) + " " + largestServerName + " 0";
-                    msg.send(jobToSchedule);
+                    msg.send(getJob() + "0");
                     msg.send("REDY");
                 }
             }
