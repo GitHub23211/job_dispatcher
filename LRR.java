@@ -1,7 +1,7 @@
 public class LRR extends Scheduler{
 
-    LRR(Buffer buffer, Message msg) {
-        super(buffer, msg);
+    LRR(Buffer buffer, Message msg, Parser parser) {
+        super(buffer, msg, parser);
     }
 
     @Override
@@ -13,12 +13,12 @@ public class LRR extends Scheduler{
                     msg.send("REDY");
                 }
                 else {
-                    String jobToSchedule = "SCHD" + Parser.getJobId(buffer.get()) + " " + largestServerName + " " + i;
+                    String jobToSchedule = "SCHD" + getJobId(buffer.get()) + " " + largestServerName + " " + i;
                     msg.send(jobToSchedule);
                     msg.send("REDY");
                     i++;
                 }
-                if(i > Integer.parseInt(maxLargestServer)) {
+                if(i > maxLargestServer) {
                     i = 0;
                 }
             }
