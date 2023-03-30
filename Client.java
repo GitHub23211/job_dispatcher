@@ -62,6 +62,9 @@ public class Client {
             schedule.get().setServers();
             schedule.get().execute();
    	    }
+        else {
+            close();
+        }
     }
 
     public void close() {
