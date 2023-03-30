@@ -11,13 +11,17 @@ public class Client {
     private Buffer buffer;
     private Message msg;
     private AlgorithmFactory fact;
+    private ParserFactory parseFact;
+    private Optional<Parser> parser;
     private Optional<Scheduler> schedule;
     private String alg;
-    
-    public Client(String ip, int port, String alg) {
+    private String parse;
+
+    public Client(String ip, int port, String alg, String parse) {
         this.ip = ip;
         this.port = port;
         this.alg = alg;
+        this.parse = parse;
         initalise();
     }
 
@@ -28,7 +32,7 @@ public class Client {
             output = new DataOutputStream(client.getOutputStream());
             buffer = new Buffer(input);
             msg = new Message(output, buffer);
-            fact = new AlgorithmFactory(buffer, msg);
+            parseFact = new ParserFactory(buffer, msg);
         } catch (Exception e) {System.out.println("Error @ initalisaiton: " + e);}       
     }
 
@@ -50,11 +54,14 @@ public class Client {
     }
 
     public void run() {
+        parser = parseFact.getParser(parse);
+        fact = new AlgorithmFactory(buffer, msg, parser.get());
+        
         schedule = fact.getAlgorithm(alg);
         if(schedule.isPresent()) {
-            schedule.get().getLargestServer();
+            schedule.get().setServers();
             schedule.get().execute();
-   	}
+   	    }
     }
 
     public void close() {
