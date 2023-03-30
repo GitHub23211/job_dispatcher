@@ -9,9 +9,12 @@ public class Parser {
         Matcher m = p.matcher(str);
         ArrayList<String> server = new ArrayList<String>();
         if(m.find()) {
-            for(int i = 0; i < 2; i++) {
-            	server.add(m.group());
-            }
+
+	server.add(m.group(1));
+	server.add(m.group(3));
+	server.add(m.group(9));
+	
+
             return server;
         }
         server.add("error");
@@ -20,7 +23,7 @@ public class Parser {
 
     public static ArrayList<String> getServerInfo(String msg) throws Exception {
         try {
-            String reg = "([^ ]+)([ ])([0-9]+)";
+            String reg = "([^ ]+)([ ])([^ ]+)([ ])([^ ]+)([ ])([^ ]+)([ ])([^ ]+)";
             return parse(reg, msg, 1);
         } catch (Exception e) {throw new Exception("Could not find largest server ID. Error: " + e);}
     }
