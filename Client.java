@@ -53,7 +53,7 @@ public class Client {
         schedule = fact.getAlgorithm(alg);
         if(schedule.isPresent()) {
             schedule.get().getLargestServer();
-            //schedule.get().execute();
+            schedule.get().execute();
    	}
     }
 
