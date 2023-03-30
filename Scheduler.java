@@ -39,7 +39,6 @@ public abstract class Scheduler {
 	for (int i = servers.size() - 1; i >= 0; i--) {
 		if(Integer.parseInt(servers[2]) >= maxCore) {
 			maxCore = servers[2];
-			
 		}
 	    
 	}
