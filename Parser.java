@@ -16,7 +16,7 @@ public abstract class Parser {
     public void getLargestServer() {
         int maxCores = 0;
         for(Server s : servers) {
-            int sCores =s.getCores();
+            int sCores = s.getCores();
             if(sCores > maxCores) {
                 maxCores = sCores;
                 max = s.getId();

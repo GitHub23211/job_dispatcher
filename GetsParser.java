@@ -50,7 +50,6 @@ public class GetsParser extends Parser {
         String name = "";
         for(int i = servers.size() - 1; i >= 0; i--) {
             Server s = servers.get(i);
-            System.out.println(s.toString());
             if(!s.getName().equals(name)) {
                 name = s.getName();
             }
