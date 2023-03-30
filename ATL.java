@@ -1,7 +1,7 @@
 public class ATL extends Scheduler { 
 
-    ATL(Buffer buffer, Message msg) {
-        super(buffer, msg);
+    ATL(Buffer buffer, Message msg, Parser parser) {
+        super(buffer, msg, parser);
     }
 
     @Override
@@ -12,7 +12,7 @@ public class ATL extends Scheduler {
                     msg.send("REDY");
                 }
                 else {
-                    String jobToSchedule = "SCHD" + Parser.getJobId(buffer.get()) + " " + largestServerName + " 0";
+                    String jobToSchedule = "SCHD" + getJobId(buffer.get()) + " " + largestServerName + " 0";
                     msg.send(jobToSchedule);
                     msg.send("REDY");
                 }

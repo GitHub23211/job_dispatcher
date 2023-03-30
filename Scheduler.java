@@ -1,31 +1,38 @@
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public abstract class Scheduler {
     Buffer buffer;
     Message msg;
+    Parser parser;
     String largestServerName;
-    String maxLargestServer;
+    int maxLargestServer;
 
-    Scheduler(Buffer buffer, Message msg) {
+    Scheduler(Buffer buffer, Message msg, Parser parser) {
         this.buffer = buffer;
         this.msg = msg;
+        this.parser = parser;
         this.largestServerName = "";
-        this.maxLargestServer = "0";
+        this.maxLargestServer = 0;
     }
 
     public abstract void execute();
 
-    public void getLargestServer() {
-        try {
-            msg.send("GETS All");
-            if(buffer.contains("DATA")) {
-                msg.send("OK");
-                while(buffer.isReady()) {
-                    buffer.update();
-                }
-                largestServerName = Parser.findLargestServer(buffer.get());
-                maxLargestServer = Parser.getMaxNumServers(buffer.get());
-                msg.send("OK");
-            }
-            msg.send("REDY");
-        } catch (Exception e) {System.out.println("Error @ GETS All request: " + e);}
+    public void setServers() {
+        parser.parse();
+        parser.getLargestServer();
+        largestServerName = parser.name;
+        maxLargestServer = parser.max;
     }
+
+    public String getJobId(String msg) {
+        String reg = "([a-zA-Z ])+[0-9]+([ ]+[0-9]+)";
+        Pattern p = Pattern.compile(reg);
+        Matcher m = p.matcher(msg);
+        if(m.find()) {
+            return m.group(2);
+        }
+        return "";
+    }
+    
 }

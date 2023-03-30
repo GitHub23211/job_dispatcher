@@ -1,36 +1,27 @@
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList; 
+public abstract class Parser {
 
-public class Parser {
+    public ArrayList<Server> servers;
+    public String name;
+    public int max;
 
-    private static String parse(String reg, String str, int index) {
-        Pattern p = Pattern.compile(reg);
-        Matcher m = p.matcher(str);
-        if(m.find()) {
-            return m.group(index);
-        }
-        return "";
+    Parser() {
+        this.servers = new ArrayList<Server>();
+        this.name = "";
+        this.max = 0;
     }
 
-    public static String findLargestServer(String msg) throws Exception {
-        try {
-            String reg = "([^ ]+)([ ])([0-9]+)";
-            return parse(reg, msg, 1);
-        } catch (Exception e) {throw new Exception("Could not find largest server ID. Error: " + e);}
-    }
-
-    public static String getMaxNumServers(String msg) throws Exception {
-    try {
-        String reg = "([^ ]+)([ ])([0-9]+)";
-        return parse(reg, msg, 3);
-    } catch (Exception e) {throw new Exception("Could not find largest number of servers. Error: " + e);}
-}
-
-    public static String getJobId(String msg) throws Exception {
-        try {
-            String reg = "([a-zA-Z ])+[0-9]+([ ]+[0-9]+)";
-            return parse(reg, msg, 2);
+    public abstract void parse();
+    
+    public void getLargestServer() {
+        int maxCores = 0;
+        for(Server s : servers) {
+            int sCores =s.getCores();
+            if(sCores > maxCores) {
+                maxCores = sCores;
+                max = s.getId();
+                name = s.getName();
+            }
         }
-        catch (Exception e) {throw new Exception("Could not get Job Id. Error: " + e);}
     }
 }
