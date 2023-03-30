@@ -4,12 +4,11 @@ import java.util.ArrayList;
 
 public class XMLParser extends DefaultHandler {
 
-    private ArrayList<Server> servers;
+    public ArrayList<Server> servers;
     private Server server;
-    
-    @Override
-    public void startDocument() throws SAXException {
-        servers = new ArrayList<Server>();
+
+    XMLParser(ArrayList<Server> servers) {
+        this.servers = servers;
     }
 
     @Override
@@ -17,8 +16,8 @@ public class XMLParser extends DefaultHandler {
         if(localName.equals("server")) {
             server = new Server();
             server.setName(attributes.getValue(0));
-            server.setId(attributes.getValue(1));
-            server.setCores(attributes.getValue(4));
+            server.setId(Integer.parseInt(attributes.getValue(1)) - 1);
+            server.setCores(Integer.parseInt(attributes.getValue(4)));
         }
     }
 
