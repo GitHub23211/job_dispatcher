@@ -1,12 +1,16 @@
+import java.util.ArrayList; 
+
 public abstract class Scheduler {
     Buffer buffer;
     Message msg;
     String largestServerName;
     String maxLargestServer;
+    ArrayList<ArrayList<String>> servers;
 
     Scheduler(Buffer buffer, Message msg) {
         this.buffer = buffer;
         this.msg = msg;
+        this.servers = new ArrayList<ArrayList<String>>();
         this.largestServerName = "";
         this.maxLargestServer = "0";
     }
@@ -20,9 +24,9 @@ public abstract class Scheduler {
                 msg.send("OK");
                 while(buffer.isReady()) {
                     buffer.update();
+                    servers.add(Parser.getServerInfo(buffer.get()));
                 }
-                largestServerName = Parser.findLargestServer(buffer.get());
-                maxLargestServer = Parser.getMaxNumServers(buffer.get());
+                //largestServerName = 
                 msg.send("OK");
             }
             msg.send("REDY");

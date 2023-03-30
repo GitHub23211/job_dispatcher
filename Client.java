@@ -53,12 +53,8 @@ public class Client {
         schedule = fact.getAlgorithm(alg);
         if(schedule.isPresent()) {
             schedule.get().getLargestServer();
-            schedule.get().execute();
-        }
-        else {
-            schedule = Optional.of(new LRR(buffer, msg));
-            schedule.get().execute();
-        }
+            //schedule.get().execute();
+   	}
     }
 
     public void close() {

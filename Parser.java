@@ -1,32 +1,38 @@
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.ArrayList; 
 
 public class Parser {
 
-    private static String parse(String reg, String str, int index) {
+    private static ArrayList<String> parse(String reg, String str, int index) {
         Pattern p = Pattern.compile(reg);
         Matcher m = p.matcher(str);
+        ArrayList<String> server = new ArrayList<String>();
         if(m.find()) {
-            return m.group(index);
+            for(int i = 0; i < 2; i++) {
+            	server.add(m.group());
+            }
+            return server;
         }
-        return "";
+        server.add("error");
+        return server;
     }
 
-    public static String findLargestServer(String msg) throws Exception {
+    public static ArrayList<String> getServerInfo(String msg) throws Exception {
         try {
             String reg = "([^ ]+)([ ])([0-9]+)";
             return parse(reg, msg, 1);
         } catch (Exception e) {throw new Exception("Could not find largest server ID. Error: " + e);}
     }
 
-    public static String getMaxNumServers(String msg) throws Exception {
+    public static ArrayList<String> getMaxNumServers(String msg) throws Exception {
     try {
         String reg = "([^ ]+)([ ])([0-9]+)";
         return parse(reg, msg, 3);
     } catch (Exception e) {throw new Exception("Could not find largest number of servers. Error: " + e);}
 }
 
-    public static String getJobId(String msg) throws Exception {
+    public static ArrayList<String> getJobId(String msg) throws Exception {
         try {
             String reg = "([a-zA-Z ])+[0-9]+([ ]+[0-9]+)";
             return parse(reg, msg, 2);
