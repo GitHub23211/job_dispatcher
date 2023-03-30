@@ -42,7 +42,7 @@ public class Client {
 
     public void auth() {
         try {
-            String[] msgs = {"HELO", "AUTH user", "REDY"};
+            String[] msgs = {"HELO", "AUTH js45203083", "REDY"};
             for(int i = 0; i < msgs.length; i++) {
                 msg.send(msgs[i]);
             }
