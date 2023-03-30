@@ -1,4 +1,5 @@
 import java.util.ArrayList; 
+import java.util.*;
 
 public abstract class Scheduler {
     Buffer buffer;
@@ -6,11 +7,13 @@ public abstract class Scheduler {
     String largestServerName;
     String maxLargestServer;
     ArrayList<ArrayList<String>> servers;
+    ArrayList<String> serversForJob;
 
     Scheduler(Buffer buffer, Message msg) {
         this.buffer = buffer;
         this.msg = msg;
         this.servers = new ArrayList<ArrayList<String>>();
+        this.serversForJob = new ArrayList<String>();
         this.largestServerName = "";
         this.maxLargestServer = "0";
     }
@@ -26,8 +29,9 @@ public abstract class Scheduler {
                     buffer.update();
                     servers.add(Parser.getServerInfo(buffer.get()));
                 }
-                System.out.println(servers);
-                //largestServerName = 
+                
+                findLargestServers();
+                System.out.println(serversForJob);
                 msg.send("OK");
             }
             msg.send("REDY");
@@ -36,11 +40,12 @@ public abstract class Scheduler {
     
     public void findLargestServers() {
     	    int maxCore = 0;
-	for (int i = servers.size() - 1; i >= 0; i--) {
-		if(Integer.parseInt(servers[2]) >= maxCore) {
-			maxCore = servers[2];
+    	    Collections.reverse(servers);
+    	    for(ArrayList<String> server : servers) {
+    		if(Integer.parseInt(server.get(2)) >= maxCore) {
+			maxCore = Integer.parseInt(server.get(2));
+			serversForJob.add(server.get(0) + server.get(1) + server.get(2));
 		}
-	    
-	}
+    	    }
     }
 }
