@@ -5,56 +5,41 @@ public class GetsParser extends Parser {
 
     private Buffer buffer;
     private Message msg;
+    private int currCores;
 
     GetsParser(Buffer buffer, Message msg) {
         super();
         this.buffer = buffer;
         this.msg = msg;
+        this.currCores = 0;
     }
 
+    @Override
     public void parse() {
-        getServers();
-        cleanServerList();
-    }
-
-    private void getServers() {
         try {
             msg.send("GETS All");
             if(buffer.contains("DATA")) {
                 msg.send("OK");
                 while(buffer.isReady()) {
+                    getLargestServer(buffer.get());
                     buffer.update();
-                    servers.add(parseGetsAll(buffer.get()));
                 }
+                getLargestServer(buffer.get());
                 msg.send("OK");
             }
             msg.send("REDY");
         } catch (Exception e) {System.out.println("Error @ GETS All request: " + e);}
     }
 
-    private Server parseGetsAll(String msg) {
-        String reg = "([^ ]+)([ ])([^ ]+)([ ])([^ ]+)([ ])([^ ]+)([ ])([^ ]+)";
+    private void getLargestServer(String msg) {
+        String reg = "(?<name>[^ ]+)[ ](?<id>[^ ]+)[ ]([^ ]+)[ ]([^ ]+)[ ](?<cores>[^ ]+)";
         Pattern p = Pattern.compile(reg);
         Matcher m = p.matcher(msg);
-        Server server = new Server();
         if(m.find()) {
-            server.setName(m.group(1));
-            server.setId(Integer.parseInt(m.group(3)));
-            server.setCores(Integer.parseInt(m.group(9)));
-            return server;
-        }
-         return server;
-    }
-
-    private void cleanServerList() {
-        String name = "";
-        for(int i = servers.size() - 1; i >= 0; i--) {
-            Server s = servers.get(i);
-            if(!s.getName().equals(name)) {
-                name = s.getName();
-            }
-            else {
-                servers.remove(i);
+            if(Integer.parseInt(m.group("cores")) > currCores) {
+                currCores = Integer.parseInt(m.group("cores"));
+                name = m.group("name");
+                max = Integer.parseInt(m.group("id"));
             }
         }
     }

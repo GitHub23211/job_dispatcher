@@ -4,8 +4,13 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.XMLReader;
 
+import java.util.ArrayList; 
+
 public class XMLMain extends Parser {
 
+    public ArrayList<Server> servers;
+
+    @Override
     public void parse() {
         try {
             String filename = "./ds-system.xml";
@@ -15,8 +20,21 @@ public class XMLMain extends Parser {
             XMLReader xmlReader =  parser.getXMLReader();
             xmlReader.setContentHandler(new XMLParser(servers));
             xmlReader.parse(getFileURL(filename));
+            getLargestServer();
         } catch (Exception e) {System.err.println("Error parsing XML: " + e);}
 
+    }
+
+    private void getLargestServer() {
+        int maxCores = 0;
+        for(Server s : servers) {
+            int sCores = s.getCores();
+            if(sCores > maxCores) {
+                maxCores = sCores;
+                max = s.getId();
+                name = s.getName();
+            }
+        }
     }
 
     private static String getFileURL(String filename) {
