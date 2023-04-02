@@ -13,7 +13,7 @@ public class LRR extends Scheduler{
                     msg.send(getJob() + i);
                     i++;
                 }                
-                if(i > maxLargestServer) {
+                if(i >= maxLargestServer) {
                     i = 0;
                 }
                 msg.send("REDY");
