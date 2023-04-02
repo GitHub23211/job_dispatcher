@@ -20,9 +20,8 @@ public abstract class Scheduler {
 
     public void setServers() {
         parser.parse();
-        parser.getLargestServer();
-        largestServerName = parser.name;
-        maxLargestServer = parser.max;
+        largestServerName = parser.getServerName();
+        maxLargestServer = parser.getMaxServerCount();
     }
 
     public String getJobId(String msg) {
