@@ -9,17 +9,14 @@ public class LRR extends Scheduler{
         try {
             int i = 0;
             while(!buffer.get().contains("NONE")) {
-                if(buffer.get().contains("JCPL")) {
-                    msg.send("REDY");
-                }
-                else {
+                if(buffer.get().contains("JOBN")) {
                     msg.send(getJob() + i);
-                    msg.send("REDY");
                     i++;
-                }
+                }                
                 if(i > maxLargestServer) {
                     i = 0;
                 }
+                msg.send("REDY");
             }
         } catch (Exception e) {System.out.println("Error @ job scheduling: " + e);}
     }

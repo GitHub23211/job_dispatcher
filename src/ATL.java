@@ -8,13 +8,10 @@ public class ATL extends Scheduler {
     public void execute() {
         try {
             while(!buffer.contains("NONE")) {
-                if(buffer.contains("JCPL")) {
-                    msg.send("REDY");
-                }
-                else {
+                if(buffer.contains("JOBN")) {
                     msg.send(getJob() + "0");
-                    msg.send("REDY");
                 }
+                msg.send("REDY");
             }
         } catch (Exception e) {System.out.println("Error @ job scheduling: " + e);}
     }
