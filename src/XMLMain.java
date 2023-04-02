@@ -13,6 +13,7 @@ public class XMLMain extends Parser {
     @Override
     public void parse() {
         try {
+            servers = new ArrayList<Server>();
             String filename = "./ds-system.xml";
             SAXParserFactory spf = SAXParserFactory.newInstance();
             spf.setNamespaceAware(true);

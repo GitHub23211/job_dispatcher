@@ -8,8 +8,8 @@ public class LRR extends Scheduler{
     public void execute() {
         try {
             int i = 0;
-            while(!buffer.get().contains("NONE")) {
-                if(buffer.get().contains("JOBN")) {
+            while(!buffer.contains("NONE")) {
+                if(buffer.contains("JOBN")) {
                     msg.send(getJob() + i);
                     i++;
                 }                
