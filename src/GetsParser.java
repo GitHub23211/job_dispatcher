@@ -36,9 +36,11 @@ public class GetsParser extends Parser {
         Pattern p = Pattern.compile(reg);
         Matcher m = p.matcher(msg);
         if(m.find()) {
-            if(Integer.parseInt(m.group("cores")) > currCores || m.group("name").equals(name)) {
-                currCores = Integer.parseInt(m.group("cores"));
-                name = m.group("name");
+            int sCores = Integer.parseInt(m.group("cores"));
+            String sName =  m.group("name");
+            if(sCores > currCores || sName.equals(name)) {
+                currCores = sCores;
+                name = sName;
                 max = Integer.parseInt(m.group("id")) + 1;
             }
         }
