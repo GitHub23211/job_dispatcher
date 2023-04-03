@@ -9,8 +9,8 @@ public class ParserFactory {
         this.msg = msg;
     }
     
-    public Optional<Parser> getParser(String algo) {
-        switch(algo) {
+    public Optional<Parser> getParser(String parser) {
+        switch(parser) {
             case "XML":
                 return Optional.of(new XMLMain());
             case "GETS":
