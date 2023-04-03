@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 
 public class Buffer {
     private String buffer;
-    BufferedReader input;
+    private BufferedReader input;
 
     Buffer(BufferedReader input) {
         this.input = input;
