@@ -55,9 +55,15 @@ public class Client {
 
     public void run() {
         parser = parseFact.getParser(parse);
-        fact = new AlgorithmFactory(buffer, msg, parser.get());
+        if(parser.isEmpty()) {
+            close();
+        }
+        else {
+            fact = new AlgorithmFactory(buffer, msg, parser.get());
+        }
         
         schedule = fact.getAlgorithm(alg);
+        
         if(schedule.isPresent()) {
             schedule.get().setServers();
             schedule.get().execute();
