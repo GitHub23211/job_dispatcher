@@ -6,7 +6,8 @@ This is the code for Stage 1 of the COMP3100 major project, S1, 2023. The aim of
 
 ## Running the Demo
 Running the demo given during the week 6 workshop involves:
-1. Unzipping "week06.tar" into the "classes" folder.
-2. Opening the linux terminal and changing directories to the "classes" folder.
-3. Executing S1Tests-wk6.sh with these arguments: 
+1. Making sure that ds-client and ds-server are in the "classes" folder.
+2. Unzipping "week06.tar" into the "classes" folder.
+3. Opening the linux terminal and changing directories to the "classes" folder.
+4. Executing S1Tests-wk6.sh with these arguments: 
     * ./S1Tests-wk6.sh Main.class -n
