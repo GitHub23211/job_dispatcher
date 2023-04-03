@@ -10,7 +10,7 @@ public class Client {
     private DataOutputStream output;
     private Buffer buffer;
     private Message msg;
-    private AlgorithmFactory fact;
+    private SchedulerFactory fact;
     private ParserFactory parseFact;
     private Optional<Parser> parser;
     private Optional<Scheduler> schedule;
@@ -59,11 +59,11 @@ public class Client {
             close();
         }
         else {
-            fact = new AlgorithmFactory(buffer, msg, parser.get());
+            fact = new SchedulerFactory(buffer, msg, parser.get());
         }
         
         schedule = fact.getAlgorithm(alg);
-        
+
         if(schedule.isPresent()) {
             schedule.get().setServers();
             schedule.get().execute();

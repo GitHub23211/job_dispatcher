@@ -1,11 +1,11 @@
 import java.util.Optional;
 
-public class AlgorithmFactory {
+public class SchedulerFactory {
     private Buffer buffer;
     private Message msg;
     private Parser parser;
 
-    AlgorithmFactory(Buffer buffer, Message msg, Parser parser) {
+    SchedulerFactory(Buffer buffer, Message msg, Parser parser) {
         this.buffer = buffer;
         this.msg = msg;
         this.parser = parser;
