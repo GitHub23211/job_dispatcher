@@ -2,11 +2,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class Scheduler {
-    Buffer buffer;
-    Message msg;
-    Parser parser;
-    String largestServerName;
-    int maxLargestServer;
+    protected Buffer buffer;
+    protected Message msg;
+    protected Parser parser;
+    protected String largestServerName;
+    protected int maxLargestServer;
 
     Scheduler(Buffer buffer, Message msg, Parser parser) {
         this.buffer = buffer;
