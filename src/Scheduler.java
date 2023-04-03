@@ -24,7 +24,7 @@ public abstract class Scheduler {
         maxLargestServer = parser.getMaxServerCount();
     }
 
-    public String getJobId(String msg) {
+    private String getJobId(String msg) {
         String reg = "([a-zA-Z ])+[0-9]+([ ]+[0-9]+)";
         Pattern p = Pattern.compile(reg);
         Matcher m = p.matcher(msg);
