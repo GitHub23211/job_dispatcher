@@ -18,7 +18,6 @@ public class FC extends Scheduler{
             while(!buffer.contains("NONE")) {
                 if(buffer.contains("JOBN")) {
               capableParse(); 
-                System.out.println(getJob1());
                     msg.send(getJob1());
                 }   
                 msg.send("REDY");
@@ -63,7 +62,6 @@ public class FC extends Scheduler{
         String reg = "(?<name>[^ ]+)[ ](?<id>[^ ]+)[ ]([^ ]+)[ ]([^ ]+)[ ](?<cores>[^ ]+)";
         Pattern p = Pattern.compile(reg);
         Matcher m = p.matcher(msg);
-        System.out.println(msg);
         if(m.find()) {
            return m.group("name");
         }
