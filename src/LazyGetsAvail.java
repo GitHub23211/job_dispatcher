@@ -33,7 +33,6 @@ public class LazyGetsAvail extends Scheduler {
 
     public void getsCapable() {
         msg.send("GETS Capable " + jobInfo.get("cores") + " " + jobInfo.get("memory") + " " + jobInfo.get("disk"));
-        System.out.println(buffer.get());
         if(buffer.contains("DATA")) {
             msg.send("OK");
             parseServerInfo(buffer.get());
