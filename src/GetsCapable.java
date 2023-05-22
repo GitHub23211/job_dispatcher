@@ -2,12 +2,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.HashMap;
 
-public class LazyGetsCapable extends Scheduler {
+public class GetsCapable extends Scheduler {
     String jobId;
     HashMap<String, String> serverInfo;
     HashMap<String, String> jobInfo;
 
-    LazyGetsCapable(Buffer buffer, Message msg, Parser parser) {
+    GetsCapable(Buffer buffer, Message msg, Parser parser) {
         super(buffer, msg, parser);
         serverInfo = new HashMap<String, String>();
         jobInfo = new HashMap<String, String>();
@@ -33,7 +33,6 @@ public class LazyGetsCapable extends Scheduler {
 
     public void getsCapable() {
         msg.send("GETS Capable " + jobInfo.get("cores") + " " + jobInfo.get("memory") + " " + jobInfo.get("disk"));
-        System.out.println(buffer.get());
         if(buffer.contains("DATA")) {
             msg.send("OK");
             parseServerInfo(buffer.get());
