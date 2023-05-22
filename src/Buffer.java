@@ -22,8 +22,7 @@ public class Buffer {
 
     public boolean isReady() {
         try {
-            boolean ready = input.ready();
-            return ready;
+            return input.ready();
         } catch (Exception e) {System.out.println("Could not get state of buffer " + e); return false;}
     }
 
