@@ -17,7 +17,7 @@ public class FC extends Scheduler{
         try {
             while(!buffer.contains("NONE")) {
                 if(buffer.contains("JOBN")) {
-              capableParse(); 
+                    capableParse(); 
                     msg.send(getJob1());
                 }   
                 msg.send("REDY");
