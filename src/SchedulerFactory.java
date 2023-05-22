@@ -16,7 +16,7 @@ public class SchedulerFactory {
             case "ATL":
                 return Optional.of(new ATL(buffer, msg, parser));
             case "LRR":
-                return Optional.of(new Algo(buffer, msg, parser));
+                return Optional.of(new LazyGetsCapable(buffer, msg, parser));
             default:
                 return Optional.empty();
         }

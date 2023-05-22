@@ -2,12 +2,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.HashMap;
 
-public class Algo extends Scheduler {
+public class LazyGetsCapable extends Scheduler {
     String jobId;
     HashMap<String, String> serverInfo;
     HashMap<String, String> jobInfo;
 
-    Algo(Buffer buffer, Message msg, Parser parser) {
+    LazyGetsCapable(Buffer buffer, Message msg, Parser parser) {
         super(buffer, msg, parser);
         serverInfo = new HashMap<String, String>();
         jobInfo = new HashMap<String, String>();
