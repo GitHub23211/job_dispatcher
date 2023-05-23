@@ -46,6 +46,10 @@ public class Server {
         return id;
     }
 
+    public String getNameAndID() {
+        return name+id;
+    }
+
     public int getCores() {
         return cores;
     }
