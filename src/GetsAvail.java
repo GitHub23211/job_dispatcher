@@ -2,12 +2,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.HashMap;
 
-public class GetsCapable extends Scheduler {
+public class GetsAvail extends Scheduler {
     String jobId;
     HashMap<String, String> serverInfo;
     HashMap<String, String> jobInfo;
 
-    GetsCapable(Buffer buffer, Message msg, Parser parser) {
+    GetsAvail(Buffer buffer, Message msg, Parser parser) {
         super(buffer, msg, parser);
         serverInfo = new HashMap<String, String>();
         jobInfo = new HashMap<String, String>();
@@ -35,11 +35,13 @@ public class GetsCapable extends Scheduler {
         msg.send("GETS Capable " + jobInfo.get("cores") + " " + jobInfo.get("memory") + " " + jobInfo.get("disk"));
         if(buffer.contains("DATA")) {
             msg.send("OK");
-            parseServerInfo(buffer.get());
             while(buffer.isReady()){
+                parseServerInfo(buffer.get());
+                findBestCapable();
                 buffer.update();
+                System.out.println(" after buffer update " + buffer.get());
+                System.out.println(" after buffer update " + buffer.isReady());
             } 
-            msg.send("OK");
         }
     }
 
@@ -57,6 +59,7 @@ public class GetsCapable extends Scheduler {
                 }
                 else {
                     getsCapable();
+                    msg.send("OK");
                 }
             }
         } catch (Exception e) {System.out.println("Error @ GETS Avail");}
@@ -85,5 +88,29 @@ public class GetsCapable extends Scheduler {
             jobInfo.put("memory", m.group("memory"));
             jobInfo.put("disk", m.group("disk"));
         }
+    }
+
+    public int parseLSTJ(String msg) {
+        String reg = "(?<name>[^ ]+)[ ]([^ ]+)[ ](?<id>[^ ]+)[ ]([^ ]+)[ ](?<cores>[^ ]+)[ ](?<memory>[^ ]+)[ ](?<disk>[^ ]+)";
+        Pattern p = Pattern.compile(reg);
+        Matcher m = p.matcher(msg);
+        if(m.find()) {
+            return Integer.parseInt(m.group("cores"));
+        }
+        return -1;
+    }
+
+    public boolean findBestCapable() {
+        System.out.println(" start of func " + buffer.get());
+        int serverCores = Integer.parseInt(serverInfo.get("cores"));
+        int jobCores = Integer.parseInt(jobInfo.get("cores"));
+        System.out.println(" before if " + buffer.get());
+        if(serverCores >= jobCores) {
+            msg.send("LSTJ " + serverInfo.get("name") + " " + serverInfo.get("id"));
+            msg.send("OK");
+            int coresInUse = parseLSTJ(buffer.get());
+           return (serverCores - coresInUse >= jobCores);
+        }
+        return false;
     }
 }
