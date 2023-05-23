@@ -16,7 +16,7 @@ public class XMLParser extends DefaultHandler {
         if(localName.equals("server")) {
             server = new Server();
             server.setName(attributes.getValue(0));
-            server.setId(Integer.parseInt(attributes.getValue(1)));
+            server.setId(attributes.getValue(1));
             server.setCores(Integer.parseInt(attributes.getValue(4)));
         }
     }

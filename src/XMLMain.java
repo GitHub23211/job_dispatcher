@@ -32,7 +32,7 @@ public class XMLMain extends Parser {
             int sCores = s.getCores();
             if(sCores > maxCores) {
                 maxCores = sCores;
-                max = s.getId();
+                max = Integer.parseInt(s.getId());
                 name = s.getName();
             }
         }

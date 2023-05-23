@@ -56,7 +56,10 @@ public class GetsAvail extends Scheduler {
                 msg.send("OK");
                 if(!buffer.get().contains(".")) {
                     serverToUse = parseServerInfo(buffer.get());
-                    while(buffer.isReady()) {
+                    while(buffer.isReady() && buffer.isEmpty()) {
+                        if(!checkCoresMatch(serverToUse)) {
+                            serverToUse = parseServerInfo(buffer.get());
+                        }
                         buffer.update();
                     }
                     msg.send("OK");
@@ -92,6 +95,10 @@ public class GetsAvail extends Scheduler {
             jobInfo.put("memory", m.group("memory"));
             jobInfo.put("disk", m.group("disk"));
         }
+    }
+
+    public boolean checkCoresMatch(Server server) {
+        return Integer.parseInt(jobInfo.get("cores")) == server.getCores();
     }
 
     // public boolean findBestCapable() {

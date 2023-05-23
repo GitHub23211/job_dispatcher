@@ -33,4 +33,12 @@ public class Buffer {
     public boolean equals(String msg) {
         return buffer.equals(msg);
     }
+
+    public boolean isEmpty() {
+        return buffer.isEmpty();
+    }
+
+    public boolean isBlank() {
+        return buffer.isBlank();
+    }
 }
