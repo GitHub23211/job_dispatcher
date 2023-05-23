@@ -38,12 +38,13 @@ public class GetsAvail extends Scheduler {
                 msg.send("OK");
                 serverToUse = parseServerInfo(buffer.get());
                 while(buffer.isReady()){
-                    // findBestCapable();
+                    if(!checkCoresMatch(serverToUse)) {
+                        serverToUse = parseServerInfo(buffer.get());
+                    }
                     buffer.update();
-                    System.out.println(" after buffer update " + buffer.get());
-                    System.out.println(" after buffer update " + buffer.isReady());
-                } 
+                }
             }
+            return serverToUse;
         } catch (Exception e) {System.out.println("Error @ GETS Avail");}
         return serverToUse;
     }
@@ -56,19 +57,15 @@ public class GetsAvail extends Scheduler {
                 msg.send("OK");
                 if(!buffer.get().contains(".")) {
                     serverToUse = parseServerInfo(buffer.get());
-                    while(buffer.isReady() && buffer.isEmpty()) {
-                        if(!checkCoresMatch(serverToUse)) {
-                            serverToUse = parseServerInfo(buffer.get());
-                        }
+                    while(buffer.isReady()) {
                         buffer.update();
                     }
-                    msg.send("OK");
                 }
                 else {
                     serverToUse = getsCapable();
-                    msg.send("OK");
                 }
             }
+            msg.send("OK");
             return serverToUse;
         } catch (Exception e) {System.out.println("Error @ GETS Avail");}
         return serverToUse;
@@ -80,7 +77,6 @@ public class GetsAvail extends Scheduler {
         Matcher m = p.matcher(msg);
         if(m.find()) {
             return new Server(m.group("name"), m.group("id"), Integer.parseInt(m.group("cores")));
-            // servers.put(serv.getName()+serv.getId(), serv);
         }
         return new Server();
     }
@@ -98,20 +94,16 @@ public class GetsAvail extends Scheduler {
     }
 
     public boolean checkCoresMatch(Server server) {
-        return Integer.parseInt(jobInfo.get("cores")) == server.getCores();
+        return server.getCores() >= Integer.parseInt(jobInfo.get("cores"));
     }
 
-    // public boolean findBestCapable() {
-    //     System.out.println(" start of func " + buffer.get());
-    //     int serverCores = Integer.parseInt(serverInfo.get("cores"));
-    //     int jobCores = Integer.parseInt(jobInfo.get("cores"));
-    //     System.out.println(" before if " + buffer.get());
-    //     if(serverCores >= jobCores) {
-    //         msg.send("LSTJ " + serverInfo.get("name") + " " + serverInfo.get("id"));
-    //         msg.send("OK");
-    //         int coresInUse = parseLSTJ(buffer.get());
-    //        return (serverCores - coresInUse >= jobCores);
-    //     }
-    //     return false;
-    // }
+    public int parseLSTJ(String msg) {
+        String reg = "(([^ ]+)[ ])+(?<cores>[0-9])[ ](?<memory>[^ ]+)[ ](?<disk>[^ ]+)";
+        Pattern p = Pattern.compile(reg);
+        Matcher m = p.matcher(msg);
+        if(m.find()) {
+            return Integer.parseInt(m.group("cores"));
+        }
+        return 0;
+    }
 }
