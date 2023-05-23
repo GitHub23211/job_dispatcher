@@ -13,10 +13,10 @@ public class SchedulerFactory {
     
     public Optional<Scheduler> getAlgorithm(String algo) {
         switch(algo) {
-            case "ATL":
-                return Optional.of(new ATL(buffer, msg, parser));
-            case "LRR":
+            case "lga":
                 return Optional.of(new LazyGetsAvail(buffer, msg, parser));
+            case "bga":
+                return Optional.of(new GetsAvail(buffer, msg, parser));
             default:
                 return Optional.empty();
         }
