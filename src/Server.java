@@ -1,19 +1,28 @@
 public class Server {
     private String name;
-    private int id;
+    private String id;
     private int cores;
+    private int coresInUse;
+
+    public Server(String name, String id, int cores) {
+        this.name = name;
+        this.id = id;
+        this.cores = cores;
+        this.coresInUse = 0;
+    }
 
     public Server() {
-        this.name = "error";
-        this.id = -1;
-        this.cores = -1;
+        name = "error";
+        id = "0";
+        cores = 0;
+        coresInUse = 0;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -21,11 +30,19 @@ public class Server {
         this.cores = cores;
     }
 
+    public void setCoresInUse(int cores) {
+        this.coresInUse = cores;
+    }
+
+    public int getAvailCores() {
+        return cores - coresInUse;
+    }
+
     public String getName() {
         return name;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
