@@ -17,10 +17,20 @@ public class GetsAvail extends Scheduler {
     public void execute() {
         try {
             while(!buffer.contains("NONE")) {
-                if(buffer.contains("JOBN")) {
+                if(buffer.contains("JOBN") || buffer.contains("JOBP")) {
                     parseJobInfo(buffer.get());
-                    msg.send(scheduleJob(getsAvail()));
-                }   
+                    Server serverToUse = getsAvail();
+                    if(!serverToUse.getName().contains("error")) {
+                        msg.send("OK");
+                        msg.send(scheduleJob(serverToUse));
+                    }
+                }
+                if(buffer.contains("JCPL")) {
+                    msg.send("LSTQ GQ #");
+                    if(Integer.parseInt(buffer.get()) > 0) {
+                        dequeueFirst();
+                    }
+                }
                 msg.send("REDY");
             }
         } catch (Exception e) {System.out.println("Error @ job scheduling: " + e);}
@@ -38,14 +48,17 @@ public class GetsAvail extends Scheduler {
                 msg.send("OK");
                 serverToUse = parseServerInfo(buffer.get());
                 while(buffer.isReady()){
-                    if(!checkCoresMatch(serverToUse)) {
+                    if(!fitnessTest(serverToUse)) {
                         serverToUse = parseServerInfo(buffer.get());
                     }
                     buffer.update();
                 }
+                if(!fitnessTest(serverToUse)) {
+                    serverToUse = parseServerInfo(buffer.get());
+                }
             }
             return serverToUse;
-        } catch (Exception e) {System.out.println("Error @ GETS Avail");}
+        } catch (Exception e) {System.out.println("Error @ GETS Capable");}
         return serverToUse;
     }
 
@@ -63,9 +76,14 @@ public class GetsAvail extends Scheduler {
                 }
                 else {
                     serverToUse = getsCapable();
+                    if(!fitnessTest(serverToUse)) {
+                        msg.send("OK");
+                        queueJob();
+                        serverToUse = new Server();
+                    }
                 }
             }
-            msg.send("OK");
+
             return serverToUse;
         } catch (Exception e) {System.out.println("Error @ GETS Avail");}
         return serverToUse;
@@ -93,7 +111,7 @@ public class GetsAvail extends Scheduler {
         }
     }
 
-    public boolean checkCoresMatch(Server server) {
+    public boolean fitnessTest(Server server) {
         return server.getCores() >= Integer.parseInt(jobInfo.get("cores"));
     }
 
@@ -105,5 +123,18 @@ public class GetsAvail extends Scheduler {
             return Integer.parseInt(m.group("cores"));
         }
         return 0;
+    }
+
+    public void queueJob() {
+        try{
+            msg.send("ENQJ GQ " + jobInfo.get("id"));
+        } catch (Exception e) {System.out.println("Error @ queueJob()");}
+
+    }
+
+    public void dequeueFirst() {
+        try {
+            msg.send("DEQJ GQ 0");
+        } catch (Exception e) {System.out.println("Error @ queueJob()");}
     }
 }
