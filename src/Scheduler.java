@@ -1,41 +1,92 @@
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public abstract class Scheduler {
     protected Buffer buffer;
     protected Message msg;
-    protected Parser parser;
+    protected Job job;
     protected String largestServerName;
     protected int maxLargestServer;
 
-    Scheduler(Buffer buffer, Message msg, Parser parser) {
+    Scheduler(Buffer buffer, Message msg) {
         this.buffer = buffer;
         this.msg = msg;
-        this.parser = parser;
+        this.job = new Job();
         this.largestServerName = "";
         this.maxLargestServer = 0;
     }
 
     public abstract void execute();
 
-    public void setServers() {
-        parser.parse();
-        largestServerName = parser.getServerName();
-        maxLargestServer = parser.getMaxServerCount();
+    public Server getsCapable() {
+        Server serverToUse = new Server();
+        try {
+            msg.send("GETS Capable " + job.jobInfo());
+            if(buffer.contains("DATA")) {
+                msg.send("OK");
+                serverToUse = Parser.parseServerInfo(buffer.get());
+                while(buffer.isReady()){
+                    if(!fitnessTest(serverToUse)) {
+                        serverToUse = Parser.parseServerInfo(buffer.get());
+                    }
+                    buffer.update();
+                }
+                if(!fitnessTest(serverToUse)) {
+                    serverToUse = Parser.parseServerInfo(buffer.get());
+                }
+            }
+            return serverToUse;
+        } catch (Exception e) {System.out.println("Error @ GETS Capable");}
+        return serverToUse;
     }
 
-    private String getJobId(String msg) {
-        String reg = "([a-zA-Z ])+[0-9]+([ ]+[0-9]+)";
-        Pattern p = Pattern.compile(reg);
-        Matcher m = p.matcher(msg);
-        if(m.find()) {
-            return m.group(2);
-        }
-        return "";
+    public Server getsAvail() {
+        Server serverToUse = new Server();
+        try {
+            msg.send("GETS Avail " + job.jobInfo());
+            if(buffer.contains("DATA")) {
+                msg.send("OK");
+                if(!(buffer.get().length() <= 1 || buffer.equals("."))) {
+                    serverToUse = Parser.parseServerInfo(buffer.get());
+                    while(buffer.isReady()) {
+                        buffer.update();
+                    }
+                }
+                else {
+                    serverToUse = getsCapable();
+                    if(!fitnessTest(serverToUse)) {
+                        msg.send("OK");
+                        queueJob();
+                        serverToUse = new Server();
+                    }
+                }
+            }
+            return serverToUse;
+        } catch (Exception e) {System.out.println("Error @ GETS Avail");}
+        return serverToUse;
     }
 
-    public String getJob() {
-        return "SCHD" + getJobId(buffer.get()) + " " + largestServerName + " ";
+    public boolean fitnessTest(Server server) {
+        return server.getCores() >= job.cores;
     }
-    
+
+    public String scheduleJob(Server serverToUse) {
+        return "SCHD " + job.id + " " + serverToUse.getName() + " " + serverToUse.getId();
+    }
+
+    public void queueJob() {
+        try{
+            msg.send("ENQJ GQ " + job.id);
+        } catch (Exception e) {System.out.println("Error @ queueJob()"); e.printStackTrace();}
+
+    }
+
+    public void dequeueFirst() {
+        try {
+            msg.send("DEQJ GQ 0");
+        } catch (Exception e) {System.out.println("Error @ queueJob()"); e.printStackTrace();}
+    }
+
+    public void dequeueAtIndex(String index) {
+        try {
+            msg.send("DEQJ GQ " + index);
+        } catch (Exception e) {System.out.println("Error @ queueJob()"); e.printStackTrace();}
+    }
 }
