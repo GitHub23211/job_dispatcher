@@ -5,7 +5,7 @@ public class Main {
             if(args.length >= 1) {
                 algo = args[0];
             } else {
-                algo = "q";
+                algo = "e";
             }
             Client client = new Client("localhost", 50000, algo);
             client.execute();
