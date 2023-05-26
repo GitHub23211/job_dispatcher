@@ -7,7 +7,6 @@ public class Main {
             } else {
                 algo = "q";
             }
-            System.out.println(algo);
             Client client = new Client("localhost", 50000, algo);
             client.execute();
             
