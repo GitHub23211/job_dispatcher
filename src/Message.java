@@ -14,6 +14,6 @@ public class Message {
             output.write((msg + "\n").getBytes());
             output.flush();
             buffer.update();
-        } catch (Exception e) {System.out.println("Error @ messages: " + e);}
+        } catch (Exception e) {System.out.println("Error @ messages: " ); e.printStackTrace();}
     }    
 }

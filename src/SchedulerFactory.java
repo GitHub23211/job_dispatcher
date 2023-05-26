@@ -9,8 +9,10 @@ public class SchedulerFactory {
     
     public Scheduler getAlgorithm(String algo) {
         switch(algo) {
-            case "bgabq":
-                return new GetsAvailBestQ(buffer, msg);
+            case "e":
+                return new GetsAvailExhaust(buffer, msg);
+            case "q":
+                return new GetsAvailQ(buffer, msg);
             default:
                 return new GetsAvailQ(buffer, msg);
         }

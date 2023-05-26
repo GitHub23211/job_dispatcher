@@ -1,9 +1,13 @@
 public class Main {
     public static void main(String[] args) {
         try {
-
             String algo = "";
-            algo = "bgaq";
+            if(args.length >= 1) {
+                algo = args[0];
+            } else {
+                algo = "q";
+            }
+            System.out.println(algo);
             Client client = new Client("localhost", 50000, algo);
             client.execute();
             

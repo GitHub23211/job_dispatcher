@@ -31,9 +31,10 @@ public abstract class Scheduler {
                 if(!fitnessTest(serverToUse)) {
                     serverToUse = Parser.parseServerInfo(buffer.get());
                 }
+                msg.send("OK");
             }
             return serverToUse;
-        } catch (Exception e) {System.out.println("Error @ GETS Capable");}
+        } catch (Exception e) {System.out.println("Error @ GETS Capable"); e.printStackTrace();}
         return serverToUse;
     }
 
@@ -48,18 +49,11 @@ public abstract class Scheduler {
                     while(buffer.isReady()) {
                         buffer.update();
                     }
-                }
-                else {
-                    serverToUse = getsCapable();
-                    if(!fitnessTest(serverToUse)) {
-                        msg.send("OK");
-                        queueJob();
-                        serverToUse = new Server();
-                    }
+                    msg.send("OK");
                 }
             }
             return serverToUse;
-        } catch (Exception e) {System.out.println("Error @ GETS Avail");}
+        } catch (Exception e) {System.out.println("Error @ GETS Avail"); e.printStackTrace();}
         return serverToUse;
     }
 
@@ -77,16 +71,10 @@ public abstract class Scheduler {
         } catch (Exception e) {System.out.println("Error @ queueJob()"); e.printStackTrace();}
 
     }
-
+    
     public void dequeueFirst() {
         try {
             msg.send("DEQJ GQ 0");
-        } catch (Exception e) {System.out.println("Error @ queueJob()"); e.printStackTrace();}
-    }
-
-    public void dequeueAtIndex(String index) {
-        try {
-            msg.send("DEQJ GQ " + index);
         } catch (Exception e) {System.out.println("Error @ queueJob()"); e.printStackTrace();}
     }
 }
