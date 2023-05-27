@@ -3,11 +3,15 @@ public class Server {
     public String id;
     public String state;
     public int cores;
+    public int mem;
+    public int disk;
 
-    public Server(String name, String id, String state, int cores) {
+    public Server(String name, String id, String state, int cores, int mem, int disk) {
         this.name = name;
         this.id = id;
         this.cores = cores;
+        this.mem = mem;
+        this.disk = disk;
         this.state = state;
     }
 
@@ -15,6 +19,8 @@ public class Server {
         name = "error";
         id = "0";
         cores = 0;
+        mem = 0;
+        disk = 0;
         state = "";
     }
 

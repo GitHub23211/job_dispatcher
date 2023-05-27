@@ -17,7 +17,9 @@ public class Parser {
             String id = m.group("id");
             String state = m.group("state");
             int cores = Integer.parseInt(m.group("cores"));
-            return new Server(name, id, state, cores);
+            int mem  = Integer.parseInt(m.group("memory"));
+            int disk =Integer.parseInt(m.group("disk"));
+            return new Server(name, id, state, cores, mem, disk);
         }
         return new Server();
     }
