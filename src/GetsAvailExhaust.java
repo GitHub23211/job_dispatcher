@@ -11,11 +11,11 @@ public class GetsAvailExhaust extends Scheduler{
                 if(buffer.contains("JOBN") || buffer.contains("JOBP")) {
                     job = Parser.parseJobInfo(buffer.get());
                     Server serverToUse = getsAvailExact();
-                    if(serverToUse.getName().contains("error")) {
+                    if(serverToUse.name.contains("error")) {
                         serverToUse = getsCapableExact();
-                        if(serverToUse.getName().contains("error")) {
+                        if(serverToUse.name.contains("error")) {
                             serverToUse = getsAvail();
-                            if(serverToUse.getName().contains("error")) {
+                            if(serverToUse.name.contains("error")) {
                                 serverToUse = getsCapable();
                                 if(!fitnessTest(serverToUse)) {
                                     queueJob();
@@ -24,7 +24,7 @@ public class GetsAvailExhaust extends Scheduler{
                             }
                         }
                     }
-                    if(!serverToUse.getName().contains("error")) {
+                    if(!serverToUse.name.contains("error")) {
                         msg.send(scheduleJob(serverToUse));
                     }
                 }
@@ -94,6 +94,13 @@ public class GetsAvailExhaust extends Scheduler{
     }
 
     public boolean exactFitnessTest(Server server) {
-        return server.getCores() == job.cores;
+        return server.cores == job.cores;
+    }
+
+    public void kill(Server server){
+        try {
+            msg.send("KILJ " + server.name + " " + server.id + job.id);
+        } catch (Exception e) {System.out.println("Error @ job kill() method: ");e.printStackTrace();}
+
     }
 }

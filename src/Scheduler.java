@@ -58,11 +58,11 @@ public abstract class Scheduler {
     }
 
     public boolean fitnessTest(Server server) {
-        return server.getCores() >= job.cores;
+        return server.cores >= job.cores;
     }
 
     public String scheduleJob(Server serverToUse) {
-        return "SCHD " + job.id + " " + serverToUse.getName() + " " + serverToUse.getId();
+        return "SCHD " + job.id + " " + serverToUse.name + " " + serverToUse.id;
     }
 
     public void queueJob() {

@@ -11,14 +11,14 @@ public class GetsAvailQ extends Scheduler {
                 if(buffer.contains("JOBN") || buffer.contains("JOBP")) {
                     job = Parser.parseJobInfo(buffer.get());
                     Server serverToUse = getsAvail();
-                    if(serverToUse.getName().contains("error")) {
+                    if(serverToUse.name.contains("error")) {
                         serverToUse = getsCapable();
                         if(!fitnessTest(serverToUse)) {
                             queueJob();
                             serverToUse = new Server();
                         }
                     }
-                    if(!serverToUse.getName().contains("error")) {
+                    if(!serverToUse.name.contains("error")) {
                         msg.send(scheduleJob(serverToUse));
                     }
                 }
