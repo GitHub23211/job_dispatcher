@@ -96,11 +96,4 @@ public class GetsAvailExhaust extends Scheduler{
     public boolean exactFitnessTest(Server server) {
         return server.cores == job.cores;
     }
-
-    public void kill(Server server){
-        try {
-            msg.send("KILJ " + server.name + " " + server.id + job.id);
-        } catch (Exception e) {System.out.println("Error @ job kill() method: ");e.printStackTrace();}
-
-    }
 }
