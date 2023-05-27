@@ -10,13 +10,14 @@ public class Parser {
     }
 
     public static Server parseServerInfo(String msg) {
-        String reg = "(?<name>[^ ]+)[ ](?<id>[^ ]+)[ ]([^ ]+)[ ]([^ ]+)[ ](?<cores>[^ ]+)[ ](?<memory>[^ ]+)[ ](?<disk>[^ ]+)";
+        String reg = "(?<name>[^ ]+)[ ](?<id>[^ ]+)[ ](?<state>[^ ]+)[ ]([^ ]+)[ ](?<cores>[^ ]+)[ ](?<memory>[^ ]+)[ ](?<disk>[^ ]+)";
         Matcher m = createParser(msg, reg);
         if(m.find()) {
             String name = m.group("name");
             String id = m.group("id");
+            String state = m.group("state");
             int cores = Integer.parseInt(m.group("cores"));
-            return new Server(name, id, cores);
+            return new Server(name, id, state, cores);
         }
         return new Server();
     }

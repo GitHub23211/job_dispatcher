@@ -11,20 +11,19 @@ public class GetsAvailExhaust extends Scheduler{
                 if(buffer.contains("JOBN") || buffer.contains("JOBP")) {
                     job = Parser.parseJobInfo(buffer.get());
                     Server serverToUse = getsAvailExact();
-                    if(serverToUse.name.contains("error")) {
+                    if(!serverToUse.isValid()) {
                         serverToUse = getsCapableExact();
-                        if(serverToUse.name.contains("error")) {
+                        if(!serverToUse.isValid()) {
                             serverToUse = getsAvail();
-                            if(serverToUse.name.contains("error")) {
+                            if(!serverToUse.isValid()) {
                                 serverToUse = getsCapable();
                                 if(!fitnessTest(serverToUse)) {
                                     queueJob();
-                                    serverToUse = new Server();
                                 }
                             }
                         }
                     }
-                    if(!serverToUse.name.contains("error")) {
+                    if(serverToUse.isValid()) {
                         msg.send(scheduleJob(serverToUse));
                     }
                 }

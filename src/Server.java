@@ -19,7 +19,7 @@ public class Server {
     }
 
     public boolean isValid() {
-        return name.contains("error");
+        return !name.contains("error");
     }
 
     public String getNameAndID() {
