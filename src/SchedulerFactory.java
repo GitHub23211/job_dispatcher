@@ -14,7 +14,7 @@ public class SchedulerFactory {
             case "q":
                 return new GetsAvailQ(buffer, msg);
             default:
-                return new GetsAvailQ(buffer, msg);
+                return new GetsAvailExhaust(buffer, msg);
         }
     }
 }

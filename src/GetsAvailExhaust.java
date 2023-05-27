@@ -12,9 +12,9 @@ public class GetsAvailExhaust extends Scheduler{
                     job = Parser.parseJobInfo(buffer.get());
                     Server serverToUse = getsAvailExact();
                     if(!serverToUse.isValid()) {
-                        serverToUse = getsCapableExact();
+                        serverToUse = getsAvail();
                         if(!serverToUse.isValid()) {
-                            serverToUse = getsAvail();
+                            serverToUse = getsCapableExact();
                             if(!serverToUse.isValid()) {
                                 serverToUse = getsCapable();
                                 if(!fitnessTest(serverToUse)) {
@@ -28,7 +28,7 @@ public class GetsAvailExhaust extends Scheduler{
                         msg.send(scheduleJob(serverToUse));
                     }
                 }
-                if(buffer.contains("JCPL")) {
+                if(buffer.contains("JCPL") || buffer.contains("CHKQ")) {
                     msg.send("LSTQ GQ #");
                     if(Integer.parseInt(buffer.get()) > 0) {
                         dequeueFirst();
@@ -94,6 +94,6 @@ public class GetsAvailExhaust extends Scheduler{
     }
 
     public boolean exactFitnessTest(Server server) {
-        return server.cores == job.cores;
+        return server.cores == job.cores && fitnessTest(server);
     }
 }
