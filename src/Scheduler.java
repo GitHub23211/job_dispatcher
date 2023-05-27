@@ -31,6 +31,9 @@ public abstract class Scheduler {
                 if(!fitnessTest(serverToUse)) {
                     serverToUse = Parser.parseServerInfo(buffer.get());
                 }
+                if(!fitnessTest(serverToUse)) {
+                    serverToUse = new Server();
+                }
                 msg.send("OK");
             }
             return serverToUse;
@@ -58,7 +61,25 @@ public abstract class Scheduler {
     }
 
     public boolean fitnessTest(Server server) {
-        return server.cores >= job.cores;
+        boolean matchCores = server.cores >= job.cores;
+        boolean matchMem = server.mem >= job.mem;
+        boolean matchDisk = server.disk >= job.disk;
+        boolean booting = checkBooting(server);
+        return matchCores && matchMem && matchDisk && booting;
+    }
+
+    public boolean checkBooting(Server server) {
+        if(server.state.contains("booting")) {
+            if(server.cores >= job.cores) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
     }
 
     public String scheduleJob(Server serverToUse) {
@@ -67,7 +88,7 @@ public abstract class Scheduler {
 
     public void queueJob() {
         try{
-            msg.send("ENQJ GQ " + job.id);
+            msg.send("ENQJ GQ");
         } catch (Exception e) {System.out.println("Error @ queueJob()"); e.printStackTrace();}
 
     }
