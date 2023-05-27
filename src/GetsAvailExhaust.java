@@ -19,6 +19,7 @@ public class GetsAvailExhaust extends Scheduler{
                                 serverToUse = getsCapable();
                                 if(!fitnessTest(serverToUse)) {
                                     queueJob();
+                                    serverToUse = new Server(); 
                                 }
                             }
                         }
