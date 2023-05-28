@@ -14,13 +14,10 @@ public class GetsAvailExhaust extends Scheduler{
                     if(!serverToUse.isValid()) {
                         serverToUse = getsAvail();
                         if(!serverToUse.isValid()) {
-                            serverToUse = getsCapableExact();
+                            serverToUse = getsCapable();
                             if(!serverToUse.isValid()) {
-                                serverToUse = getsCapable();
-                                if(!serverToUse.isValid()) {
-                                    queueJob();
-                                    serverToUse = new Server(); 
-                                }
+                                queueJob();
+                                serverToUse = new Server(); 
                             }
                         }
                     }
@@ -38,33 +35,7 @@ public class GetsAvailExhaust extends Scheduler{
             }
         } catch (Exception e) {System.out.println("Error @ job scheduling: " + e);}
     }
-
-    public Server getsCapableExact() {
-        Server serverToUse = new Server();
-        try {
-            msg.send("GETS Capable " + job.jobInfo());
-            if(buffer.contains("DATA")) {
-                msg.send("OK");
-                serverToUse = Parser.parseServerInfo(buffer.get());
-                while(buffer.isReady()){
-                    if(!exactFitnessTest(serverToUse)) {
-                        serverToUse = Parser.parseServerInfo(buffer.get());
-                    }
-                    buffer.update();
-                }
-                if(!exactFitnessTest(serverToUse)) {
-                    serverToUse = Parser.parseServerInfo(buffer.get());
-                }
-                if(!exactFitnessTest(serverToUse)) {
-                    serverToUse = new Server();
-                }
-                msg.send("OK");
-            }
-            return serverToUse;
-        } catch (Exception e) {System.out.println("Error @ GETS Capable"); e.printStackTrace();}
-        return serverToUse;
-    }
-
+    
     public Server getsAvailExact() {
         Server serverToUse = new Server();
         try {

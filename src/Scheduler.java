@@ -19,13 +19,13 @@ public abstract class Scheduler {
                 msg.send("OK");
                 Server temp = Parser.parseServerInfo(buffer.get());
                 while(buffer.isReady()){
-                    if(job.coreFit(temp)) {
+                    if(job.coreFit(temp) && !fitnessTest(serverToUse)) {
                         serverToUse = temp;
                     }
                     buffer.update();
                     temp = Parser.parseServerInfo(buffer.get());
                 }
-                if(job.coreFit(temp)) {
+                if(job.coreFit(temp) && !fitnessTest(serverToUse)) {
                     serverToUse = temp;
                 }
                 if(!fitnessTest(serverToUse)) {
