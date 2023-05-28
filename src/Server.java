@@ -29,7 +29,7 @@ public class Server {
     }
 
     public String getNameAndID() {
-        return name+id;
+        return name + " " +id;
     }
 
     @Override

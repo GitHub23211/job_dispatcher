@@ -79,7 +79,7 @@ public abstract class Scheduler {
     }
 
     public String scheduleJob(Server serverToUse) {
-        return "SCHD " + job.id + " " + serverToUse.name + " " + serverToUse.id;
+        return "SCHD " + job.id + " " + serverToUse.getNameAndID();
     }
 
     public void queueJob() {
