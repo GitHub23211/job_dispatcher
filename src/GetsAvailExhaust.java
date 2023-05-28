@@ -14,9 +14,9 @@ public class GetsAvailExhaust extends Scheduler{
                     if(!serverToUse.isValid()) {
                         serverToUse = getsAvail();
                         if(!serverToUse.isValid()) {
-                            serverToUse = getsCapable();
+                            serverToUse = getsCapableExact();
                             if(!serverToUse.isValid()) {
-                                serverToUse = getsCapableExact();
+                                serverToUse = getsCapable();
                                 if(!fitnessTest(serverToUse)) {
                                     queueJob();
                                     serverToUse = new Server(); 
