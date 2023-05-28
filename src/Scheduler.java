@@ -2,15 +2,11 @@ public abstract class Scheduler {
     protected Buffer buffer;
     protected Message msg;
     protected Job job;
-    protected String largestServerName;
-    protected int maxLargestServer;
 
     Scheduler(Buffer buffer, Message msg) {
         this.buffer = buffer;
         this.msg = msg;
         this.job = new Job();
-        this.largestServerName = "";
-        this.maxLargestServer = 0;
     }
 
     public abstract void execute();

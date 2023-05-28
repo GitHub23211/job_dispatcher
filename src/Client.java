@@ -9,7 +9,6 @@ public class Client {
     private DataOutputStream output;
     private Buffer buffer;
     private Message msg;
-    private SchedulerFactory fact;
     private Scheduler schedule;
     private String alg;
 
@@ -27,7 +26,6 @@ public class Client {
             output = new DataOutputStream(socket.getOutputStream());
             buffer = new Buffer(input);
             msg = new Message(output, buffer);
-            fact = new SchedulerFactory(buffer, msg);
         } catch (Exception e) {System.out.println("Error @ initalisaiton: " + e);}       
     }
 
@@ -49,7 +47,7 @@ public class Client {
     }
 
     public void run() {
-        schedule = fact.getAlgorithm(alg);
+        schedule = new GetsAvailExhaust(buffer, msg);
         schedule.execute();
     }
 
