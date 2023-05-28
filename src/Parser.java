@@ -25,15 +25,14 @@ public class Parser {
     }
 
     public static Job parseJobInfo(String msg) {
-        String reg = "(?<name>[^ ]+)[ ]([^ ]+)[ ](?<id>[^ ]+)[ ]([^ ]+)[ ](?<cores>[^ ]+)[ ](?<memory>[^ ]+)[ ](?<disk>[^ ]+)";
+        String reg = "([^ ]+)[ ]([^ ]+)[ ](?<id>[^ ]+)[ ]([^ ]+)[ ](?<cores>[^ ]+)[ ](?<memory>[^ ]+)[ ](?<disk>[^ ]+)";
         Matcher m = createParser(msg, reg);
         if(m.find()) {
-            String name = m.group("name");
             String id = m.group("id");
             int cores = Integer.parseInt(m.group("cores"));
             int mem = Integer.parseInt(m.group("memory"));
             int disk = Integer.parseInt(m.group("disk"));
-            return new Job(name, id, cores, mem, disk);
+            return new Job(id, cores, mem, disk);
         }
         return new Job();
     }

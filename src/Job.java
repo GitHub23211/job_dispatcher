@@ -1,5 +1,4 @@
 public class Job {
-    public String name;
     public String id;
     public int cores;
     public int mem;
@@ -7,8 +6,7 @@ public class Job {
     public int coreFit;
     public int currentFit = -1;
 
-    Job(String name, String id, int cores, int mem, int disk) {
-        this.name = name;
+    Job(String id, int cores, int mem, int disk) {
         this.id = id;
         this.cores = cores;
         this.mem = mem;
@@ -16,7 +14,6 @@ public class Job {
     }
 
     Job(String name, String id, int cores) {
-        this.name = name;
         this.id = id;
         this.cores = cores;
         this.mem = 0;
@@ -24,7 +21,6 @@ public class Job {
     }
 
     Job() {
-        this.name = "empty";
         this.id = "0";
         this.cores = 0;
         this.mem = 0;
