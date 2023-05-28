@@ -17,15 +17,16 @@ public abstract class Scheduler {
             msg.send("GETS Capable " + job.jobInfo());
             if(buffer.contains("DATA")) {
                 msg.send("OK");
-                serverToUse = Parser.parseServerInfo(buffer.get());
+                Server temp = Parser.parseServerInfo(buffer.get());
                 while(buffer.isReady()){
-                    if(!fitnessTest(serverToUse)) {
-                        serverToUse = Parser.parseServerInfo(buffer.get());
+                    if(job.coreFit(temp)) {
+                        serverToUse = temp;
                     }
                     buffer.update();
+                    temp = Parser.parseServerInfo(buffer.get());
                 }
-                if(!fitnessTest(serverToUse)) {
-                    serverToUse = Parser.parseServerInfo(buffer.get());
+                if(job.coreFit(temp)) {
+                    serverToUse = temp;
                 }
                 if(!fitnessTest(serverToUse)) {
                     serverToUse = new Server();
@@ -61,7 +62,7 @@ public abstract class Scheduler {
         boolean matchMem = server.mem >= job.mem;
         boolean matchDisk = server.disk >= job.disk;
         boolean booting = checkBooting(server);
-        return (matchCores && matchMem && matchDisk && booting && !job.coreFit(server));
+        return (matchCores && matchMem && matchDisk && booting);
     }
 
     public boolean checkBooting(Server server) {
