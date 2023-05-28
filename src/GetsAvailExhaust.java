@@ -94,6 +94,10 @@ public class GetsAvailExhaust extends Scheduler{
     }
 
     public boolean exactFitnessTest(Server server) {
-        return server.cores == job.cores && fitnessTest(server);
+        boolean matchCores =  server.cores == job.cores;
+        boolean matchMem = server.mem >= job.mem;
+        boolean matchDisk = server.disk >= job.disk;
+        boolean booting = checkBooting(server);
+        return matchCores && matchMem && matchDisk && booting;
     }
 }

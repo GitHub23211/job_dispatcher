@@ -4,6 +4,8 @@ public class Job {
     public int cores;
     public int mem;
     public int disk;
+    public int coreFit;
+    public int currentFit = -1;
 
     Job(String name, String id, int cores, int mem, int disk) {
         this.name = name;
@@ -27,6 +29,15 @@ public class Job {
         this.cores = 0;
         this.mem = 0;
         this.disk = 0;
+    }
+
+    public boolean coreFit(Server server) {
+        int coreCompare = server.cores - cores;
+        if((coreCompare <= currentFit || currentFit == -1) && coreCompare >= 0) {
+            currentFit = coreCompare;
+            return true;
+        }
+        return false;
     }
 
     public String jobInfo(){
