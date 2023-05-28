@@ -10,12 +10,10 @@ public class Client {
     private Buffer buffer;
     private Message msg;
     private Scheduler schedule;
-    private String alg;
 
-    public Client(String ip, int port, String alg) {
+    public Client(String ip, int port) {
         this.ip = ip;
         this.port = port;
-        this.alg = alg;
         initalise();
     }
 
