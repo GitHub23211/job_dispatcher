@@ -97,7 +97,6 @@ public class GetsAvailExhaust extends Scheduler{
         boolean matchCores =  server.cores == job.cores;
         boolean matchMem = server.mem >= job.mem;
         boolean matchDisk = server.disk >= job.disk;
-        boolean booting = checkBooting(server);
-        return matchCores && matchMem && matchDisk && booting;
+        return matchCores && matchMem && matchDisk;
     }
 }

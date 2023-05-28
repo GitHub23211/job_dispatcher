@@ -61,23 +61,9 @@ public abstract class Scheduler {
         boolean matchCores = server.cores >= job.cores;
         boolean matchMem = server.mem >= job.mem;
         boolean matchDisk = server.disk >= job.disk;
-        boolean booting = checkBooting(server);
-        return (matchCores && matchMem && matchDisk && booting);
+        return (matchCores && matchMem && matchDisk);
     }
 
-    public boolean checkBooting(Server server) {
-        if(server.state.contains("booting")) {
-            if(server.cores >= job.cores) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-        else {
-            return true;
-        }
-    }
 
     public String scheduleJob(Server serverToUse) {
         return "SCHD " + job.id + " " + serverToUse.getNameAndID();
